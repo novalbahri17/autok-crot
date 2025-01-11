@@ -28,7 +28,7 @@ def commit_changes(quote, index):
     )
 
 # Main script
-if _name_ == "_main_":
+if __name__ == "__main__":  # Fixed from _name_ to __name__
     num_commits = random.randint(6, 10)  # Random number of commits between 6 and 10
     for i in range(1, num_commits + 1):
         quote = fetch_quote()
