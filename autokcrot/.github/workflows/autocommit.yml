@@ -1,0 +1,39 @@
+name: Auto Commit Random Quote
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  # Runs daily at midnight
+  workflow_dispatch:
+
+jobs:
+  auto_commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install Python dependencies
+        run: pip install requests
+
+      - name: Configure Git user
+        run: |
+          git config --global user.email "novalbahri17@gmail.com"
+          git config --global user.name "novalbahri17"
+
+      - name: Run commit script
+        run: python3 auto_commit.py
+
+      - name: Push changes
+        run: |
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/novalbahri17/autok-crot.git HEAD:main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
