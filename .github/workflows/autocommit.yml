@@ -16,13 +16,13 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          python-version: "3.x"
+          node-version: "16.x"
 
-      - name: Install Python dependencies
-        run: pip install requests
+      - name: Install dependencies
+        run: npm install axios
 
       - name: Configure Git user
         run: |
@@ -30,7 +30,7 @@ jobs:
           git config --global user.name "novalbahri17"
 
       - name: Run commit script
-        run: python3 auto_commit.py
+        run: node auto_commit.js
 
       - name: Push changes
         run: |
