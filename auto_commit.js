@@ -2,6 +2,9 @@ const fs = require('fs');
 const axios = require('axios');
 const { execSync } = require('child_process');
 
+// Fungsi untuk delay
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 // Fetch a random quote
 async function fetchQuote() {
   try {
@@ -48,6 +51,11 @@ function commitChanges(quote, index) {
     } catch (error) {
       console.error('Gagal menyelesaikan commit. Berhenti.');
       break;
+    }
+
+    if (i < numCommits) {
+      console.log(`Menunggu 20 menit sebelum commit berikutnya...`);
+      await delay(20 * 60 * 1000); // 20 menit dalam milidetik
     }
   }
 
