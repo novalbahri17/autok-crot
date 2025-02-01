@@ -2,16 +2,18 @@ const fs = require('fs');
 const axios = require('axios');
 const { execSync } = require('child_process');
 
-// Fungsi untuk delay
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const API_KEY = '73277aeda06202693fb83b0ca5fcaa49';
+const API_URL = 'https://favqs.com/api/qotd';
 
 // Fetch a random quote
 async function fetchQuote() {
   try {
-    const response = await axios.get('https://zenquotes.io/api/random');
-    if (response.status === 200) {
-      const quoteData = response.data[0];
-      return `${quoteData.q} - ${quoteData.a}`;
+    const response = await axios.get(API_URL, {
+      headers: { 'Authorization': `Token token="${API_KEY}"` }
+    });
+    if (response.status === 200 && response.data.quote) {
+      const quoteData = response.data.quote;
+      return `${quoteData.body} - ${quoteData.author}`;
     } else {
       return 'Tidak ada kutipan hari ini.';
     }
@@ -41,7 +43,7 @@ function commitChanges(quote, index) {
 
 // Main script
 (async () => {
-  const numCommits = Math.floor(Math.random() * (10 - 6 + 1)) + 6; // Random number between 6 and 10
+  const numCommits = Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
 
   for (let i = 1; i <= numCommits; i++) {
     const quote = await fetchQuote();
@@ -51,11 +53,6 @@ function commitChanges(quote, index) {
     } catch (error) {
       console.error('Gagal menyelesaikan commit. Berhenti.');
       break;
-    }
-
-    if (i < numCommits) {
-      console.log(`Menunggu 20 menit sebelum commit berikutnya...`);
-      await delay(20 * 60 * 1000); // 20 menit dalam milidetik
     }
   }
 
